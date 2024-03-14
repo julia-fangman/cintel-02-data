@@ -1,12 +1,14 @@
-\from shiny.express import input, ui
+import plotly.express as px
+from shiny.express import input, ui
 from shinywidgets import render_plotly
 from shiny import reactive, render, req
 import palmerpenguins
 import seaborn as sns
-import plotly.express as px
 import pandas as pd
 
 penguins_df = palmerpenguins.load_penguins()
+
+ui.page_opts(title="Julia's Penguin Data", fillable=True)
 
 with ui.sidebar(position="right", open="open"):
     ui.h2("Sidebar")
@@ -31,7 +33,7 @@ with ui.sidebar(position="right", open="open"):
     
     ui.a("Github", href="https://github.com/julia-fangman/cintel-02-data", target="_blank")
 
-# Created accordion layout with DataTable and DataGrid
+# Accordion Layout with DataTable and DataGrid
 with ui.accordion(id="acc", open="closed"):
     with ui.accordion_panel("Data Table"):
         @render.data_frame
@@ -101,7 +103,6 @@ with ui.navset_card_tab(id="tab"):
         with ui.nav_panel("Pie Chart"):
             species_distribution = penguins_df["species"].value_counts().reset_index()
             species_distribution.columns = ["species", "count"]
-            
             @render_plotly
             def pie_chart():
                 return px.pie(
